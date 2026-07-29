@@ -9,12 +9,12 @@ import string
 from datetime import datetime
 import google.generativeai as genai
 
+
 # ==========================================
 # 1. PAGE CONFIG (ĐẶT ĐẦU FILE)
 # ==========================================
 st.set_page_config(
     page_title="TruthLens AI",
-    page_icon="🛡️",
     layout="wide"
 )
 
@@ -42,7 +42,7 @@ logo_base64 = get_base64_image("assets/logo.png")
 if logo_base64:
     logo_html = f'<img src="data:image/png;base64,{logo_base64}" style="height: 40px; width: auto; border-radius: 4px;">'
 else:
-    logo_html = '<div style="color: #3b82f6; font-size: 24px;">🛡️</div>'
+    logo_html = '<div style="color: #3b82f6; font-size: 24px;"></div>'
 
 st.markdown("""
 <style>
@@ -51,6 +51,8 @@ st.markdown("""
 header[data-testid="stHeader"] {
     display: none !important;
 }
+
+
 
 /* 2. Đưa vùng chứa nội dung (Main Content) sát lên mép trên cùng của màn hình */
 div[data-testid="stAppViewBlockContainer"],
@@ -234,14 +236,34 @@ div[data-testid="stAppViewBlockContainer"],
         border: 1px solid #10B981 !important;
         border-radius: 10px !important;
     }
+    
+   
+    /* Ép màu chữ khi gõ trong khung Chat Input thành màu đen */
+    div[data-testid="stChatInput"] textarea {
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+        background-color: #FFFFFF !important; /* Đổi nền thành trắng cho dễ nhìn chữ đen (tùy chọn) */
+    }
+
+
+/* Ẩn hoàn toàn menu điều hướng mặc định của Streamlit */
+[data-testid="stSidebarNav"] {
+    display: none !important;
+}
+
+    
+
 </style>
 """, unsafe_allow_html=True)
+
+
+
 
 # ==========================================
 # 3. GEMINI & ML MODEL LOADING
 # ==========================================
 GEMINI_API_KEY = ""
-genai.configure(api_key=GEMINI_API_KEY)
+genai.configure(api_key="")
 gemini = genai.GenerativeModel("gemini-2.5-flash")
 
 @st.cache_resource
@@ -268,10 +290,9 @@ with st.sidebar:
     st.title("TruthLens AI")
     st.caption("AI Fake News Detection")
     st.divider()
-    st.page_link("app.py", label="🏠 Dashboard")
+    st.page_link("app.py", label="🏠 About")
+    st.page_link("pages/About.py", label="ℹ️ Detect")
     st.page_link("pages/History.py", label="📜 History")
-    st.page_link("pages/Performance.py", label="📊 Model Performance")
-    st.page_link("pages/About.py", label="ℹ️ About")
     st.divider()
     st.write("### Project")
     st.write("Dataset")
@@ -296,14 +317,11 @@ st.markdown(f"""
         </div>
     </div>
     <div style="display: flex; gap: 60px; color: #94a3b8; font-size: 16px; font-weight: 500;">
-        <a href="/" target="_self" style="color: #94a3b8; text-decoration: none;">Home</a>
         <a href="/" target="_self" style="color: #38bdf8; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; text-decoration: none;">Detect</a>
         <a href="/About" target="_self" style="color: #94a3b8; text-decoration: none;">About</a>
         <a href="/History" target="_self" style="color: #94a3b8; text-decoration: none;">History</a>
     </div>
-    <div style="display: flex; align-items: center; gap: 20px;">
-        <div style="background-color: #3b82f6; color: #f8fafc; padding: 6px 16px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer;">Login</div>
-    </div>
+
 </div>
 """, unsafe_allow_html=True)
 
@@ -361,7 +379,7 @@ with right:
         result_placeholder = st.empty()
         
     with tab_chat:
-        st.markdown("### Chat with NewsGuard AI")
+        st.markdown("### Chat with TruthLens AI")
         st.markdown("<p style='color:#94a3b8; font-size:14px;'>Ask questions about the analyzed article or factual cross-checking.</p>", unsafe_allow_html=True)
         
         st.markdown("<div class='chat-container'>", unsafe_allow_html=True)
